@@ -1,0 +1,62 @@
+purpus:
+  {{ ops_purpus }}
+operator: {{ operator }}
+operation_date: {{ operation_date }}
+hosts:
+  management_ipaddress: {{ management_ipaddress }}
+  hostname: {{ hostname }}
+  os : {{os_name}}
+  username: {{ username }}
+  password: {{ password }}
+scenario:
+  - validate:
+      - facts:
+          version: {{ os_version }}
+          hostname: {{ hostname }}
+      - bgp_summary
+      - bgp_neighbor:
+        - neighbor_address: {{ neighbor_address }}
+          advertise_prefixes: 0
+      - interfaces:
+          admin: True
+          physical: False 
+      - environment:
+          cpu_maxrate: '20.0'
+          memory_maxrate : '40.0'
+  {%- if peer_type == 1 %}
+  - set_add_interface_ipv4:
+      interface_name: {{interface_name}}
+      interface_address: {{interface_address}}
+      interface_subnet: {{interface_subnet}}
+      interface_description: {{interface_description}}
+  {%- endif %}
+  {%- if peer_type == 1 or peer_type == 2 %}
+  - set_add_network_ipv4:
+      local_asnum : {{local_asnum}}
+      network_address : 10.30.30.0
+      network_subnet: 24
+  - set_add_bgp_policy_ipv4:
+      policy_name_out: {{policy_name_out}}
+      prefix_name_out: {{policy_name_in}}
+      advertised_route_address: 10.10.10.0
+      advertised_route_subnet: 24
+  - set_add_bgp_neighbor_ipv4:
+      local_asnum : {{local_asnum}}
+      neighbor_asnum : {{neighbor_asnum}}
+      neighbor: {{neighbor_address}}
+      neighbor_description:  {{neighbor_description}}
+      policy_name_out: {{policy_name_out}}
+      policy_name_in: {{policy_name_in}}
+  {%- endif %}
+  - sleep_20sec
+  - validate:
+      - bgp_summary
+      - bgp_neighbor:
+        - neighbor_address: {{neighbor_address}}
+          advertise_prefixes: 0
+      - interfaces:
+          admin: True
+          physical: False 
+      - environment:
+          cpu_maxrate: 20.0
+          memory_maxrate : 40.0

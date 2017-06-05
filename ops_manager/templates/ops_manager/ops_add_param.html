@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Ops Registration{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/datetimepicker.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+
+    <h3 class="page-header">作業の新規登録</h3>
+    <p>ピアの情報を入力して下さい</p>
+    <div class="col col-md-8">
+    <form action="{% url 'ops_manager:ops_add_confirm' %}" method="post" class="form-horizontal col-xs-7" role="form">
+      {% csrf_token %}
+        {% if peer_type == 1%}
+        <label>Interface Address</label>
+        <input type="text"  class="form-control" placeholder="Ethernet1/1" name="interface_name"><br>
+        <label>Interface Prefix</label>
+        <input type="text"  class="form-control" placeholder="30" name="interface_subnet"><br>
+        <label>Interface Description</label>
+        <input type="text"  class="form-control" placeholder="PublicPeer#1" name="interface_description"><br>
+        {% endif %}
+
+        <label>Neighbor IP</label>
+        <input type="text" class="form-control" name="neighbor_address" placeholder="192.168.1.1"></br>
+
+        <label>Neighbor AS</label>
+        <input type="text" class="form-control" name="neighbor_asnum" placeholder="65001"></br>
+
+        <label>Neighbor Description</label>
+        <input type="text" class="form-control" name="neighbor_description" placeholder="Peer1#1"></br>
+
+        <label>経路受信ポリシー</label>
+        <input type="text" class="form-control" name="policy_name_out" placeholder="peer-in"></br>
+
+        <label>経路送信ポリシー</label>
+        <input type="text" class="form-control" name="policy_name_in" placeholder="peer-out"></br>
+        <br>
+        <input type="hidden" name="title" value="{{title}}">
+        <input type="hidden" name="approval_num" value="{{approval_num}}">
+        <input type="hidden" name="operation_date" value="{{operation_date}}">
+        <input type="hidden" name="operator" value="{{operator}}">
+        <input type="hidden" name="peer_type" value="{{peer_type}}">
+        <input type="hidden" name="router_name" value="{{router_name}}">
+        <input type="hidden" name="ops_purpus" value="{{ops_purpus}}">
+            <a href="{% url 'ops_manager:ops_list' %}" class="btn btn-secondary btn-lg float-md-left">戻る</a>
+            <button type="submit" class="btn btn-primary btn-lg float-md-right">次へ</button>
+    </form><br>
+    </div>
+{% endblock content %}

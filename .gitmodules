@@ -1,0 +1,3 @@
+[submodule "ops_manager/scripts/napalm-scenario"]
+	path = ops_manager/scripts/napalm-scenario
+	url = https://github.com/as2518/napalm-scenario

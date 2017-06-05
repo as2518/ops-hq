@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Ops Registration{% endblock title %}
+
+{% block content %}
+
+    <h3 class="page-header">作業内容の確認</h3>
+    <p>下記の情報で手順書を作成して登録します。</p>
+    <div class="col col-10">
+    <form action="{% url 'ops_manager:ops_list' %}" method="post" class="form-horizontal col-xs-7" role="form">
+      {% csrf_token %}
+        <div class="form-group row">
+            <label class="col col-md-4">実施日</label>
+            <span class="col-md-6 form-control" type="datetime-local" name="operation_date" value={{operation_date}}>{{operation_date}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">承認番号</label>
+            <span class="col-md-6 form-control" type="text" name="approval_num" value={{approval_num}}>{{approval_num}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">作業者</label>
+            <span class="col-md-6 form-control" type="text" name="operator" value={{operator}}>{{operator}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">作業概要</label>
+            <span class="col-md-6 form-control" type="textarea" name="ops_purpus" value={{ops_purpus}}>{{ops_purpus}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">作業区分</label>
+            <span class="col-md-6 form-control" type="text" name="peer_type" value={{peer_type}}>{{peer_type}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">対象機器</label>
+            <span class="col-md-6 form-control" type="text" name="router_name" value={{router_name}}>{{router_name}}</span>
+        </div>
+
+        {% if peer_type == 1%}
+        <div class="form-group row">
+            <label class="col col-md-4">Interface Address</label>
+            <span class="col-md-6 form-control" type="text" name=interface_name value={{interface_name}}>{{interface_name}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">Interface Subnet</label>
+            <span class="col-md-6 form-control" type="text" name=interface_subnet value={{interface_subnet}}>{{interface_subnet}}</span>
+        </div>
+        <input type="hidden" name="interface_name" value={{interface_name}}>
+        <input type="hidden" name="interface_description" value={{interface_description}}>
+        <input type="hidden" name="interface_subnet" value={{interface_subnet}}>
+        <input type="hidden" name="interface_address" value={{interface_address}}>
+
+        {% endif %}
+
+        <div class="form-group row">
+            <label class="col col-md-4">Interface Description</label>
+            <span class="col-md-6 form-control" type="text" name=interface_description value={{interface_description}}>{{interface_description}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">Neighbor IP</label>
+            <span class="col-md-6 form-control" type="text" name=neighbor_address value={{neighbor_address}}>{{neighbor_address}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">Neighbor AS</label>
+            <span class="col-md-6 form-control" type="text" name=neighbor_asnum value={{neighbor_asnum}}>{{neighbor_asnum}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">Neighbor Description</label>
+            <span class="col-md-6 form-control" type="text" name=neighbor_description value={{neighbor_description}}>{{neighbor_description}}</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col col-md-4">経路受信ポリシー</label>
+            <span class="col-md-6 form-control" type="text" name=policy_name_in value={{policy_name_in}}>{{policy_name_in}}</span>
+        </div>
+
+         <div class="form-group row">
+            <label class="col col-md-4">経路送信ポリシー</label>
+            <span class="col-md-6 form-control" type="text" name=policy_name_out value={{policy_name_out}}>{{policy_name_out}}</span>
+        </div>
+
+        <input type="hidden" name="title" value="{{title}}">
+        <input type="hidden" name="approval_num" value="{{approval_num}}">
+        <input type="hidden" name="operation_date" value="{{operation_date}}">
+        <input type="hidden" name="operator" value="{{operator}}">
+        <input type="hidden" name="peer_type" value="{{peer_type}}">
+        <input type="hidden" name="router_name" value="{{router_name}}">
+
+        <input type="hidden" name="neighbor_address" value="{{neighbor_address}}">
+        <input type="hidden" name="neighbor_asnum" value="{{neighbor_asnum}}">
+        <input type="hidden" name="neighbor_description" value="{{neighbor_description}}">
+        <input type="hidden" name="policy_name_in" value="{{policy_name_in}">
+        <input type="hidden" name="policy_name_out" value="{{policy_name_out}}">
+        <input type="hidden" name="ops_purpus" value="{{ops_purpus}}">
+        <a href="{% url 'ops_manager:ops_list' %}" class="btn btn-secondary btn-lg float-md-left">Cancel</a>
+        <button type="submit" class="btn btn-primary btn-lg float-md-right">OK</button>
+    </form><br>
+    </div>
+{% endblock content %}

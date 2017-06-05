@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Operation list{% endblock title %}
+
+{% block extrahead %}
+
+{% endblock extrahead %}
+
+{% block content %}
+
+    <h3 class="page-header">手順書作成リスト</h3>
+    <!--<div class="col-md-7">-->
+    <!--<form>
+        <input type="text" id="device_search" class="form-control" placeholder="Router Search">
+    </form>-->
+    <a href="{% url 'ops_manager:ops_add' %}" class="btn btn-success btn-md">Add new Operation</a>
+    <table class="table table-bordered table-hover" id="ops_list">
+      <thead>
+      <tr>
+        <th>Status</th>
+        <th>Ops Date</th>
+        <th>Approval num</th>
+        <th>Overview</th>
+        <th>Operator</th>
+        <th>YML</th>
+        <th>Detail</th>
+      </tr>
+      <tbody>
+            {% for ops in ops_list %}
+            <tr {% if ops.rollback_status == False %}
+                    {% if ops.ops_status == True %}
+                        {% if ops.approval_status == True %}
+                        class="table-success"
+                        {% endif %}
+                    {% else %}
+                        {% if ops.approval_status == True %}
+                        class="table-info">
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    class="table-danger">
+                {% endif %}
+
+                <div class="form-group">
+                    {% if ops.rollback_status == False %}
+                        {% if ops.ops_status == False %}
+                            {% if ops.approval_status == False %}
+                        <td><button type="submit" class="btn btn-info btn-sm btn-block " disabled="disabled">確認前</button></td>
+                            {% else %}
+                        <td><button type="submit" class="btn btn-warning btn-sm btn-block " disabled="disabled">実施前</button></td>
+                            {% endif %}
+                        {% else %}
+                        <td><button type="submit" class="btn btn-success btn-sm btn-block" disabled="disabled">作業完了</button></td>
+                        {% endif %}
+                    {% else %}
+                        <td><button type="submit" class="btn btn-danger btn-sm btn-block" disabled="disabled">中止</button></td>
+                    {%endif%}
+                    <td>{{ ops.operation_date }}</td>               
+                    <td>{{ ops.approval_num }}</td>
+                    <td>{{ ops.title }}</td>
+                    <td>{{ ops.operator }}</td>
+                    <td>
+                        {% if ops.ops_status == False %}
+                        <a href="" class="btn btn-sm btn-secondary btn-block" id="dl-yml-{{ ops.id }}" download="{{ ops.operation_date }}_{{ ops.approval_num }}.yml">Download</a>
+                        <input type="hidden" id = 'yml-{{ ops.id }}' value='{{ ops.yml_data }}'>
+                        {% else %}
+                        <button type="submit" class="btn btn-secondary btn-sm btn-block" disabled="disabled">Download</button>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'ops_manager:ops_detail' ops_id=ops.id %}" class="btn btn-success btn-sm btn-block">Detail</a></td>
+                </div>
+            </tr>
+            {% endfor %}
+      </tbody>
+      </table>
+    <!--</div>-->
+
+<script type="text/javascript">
+    {% for ops in ops_list %}
+    document.querySelector('#dl-yml-{{ ops.id }}').onclick = function() {
+        var text = document.querySelector('#yml-{{ ops.id }}').value;
+        this.href = 'data:text/plain;charset=utf-8,'
+            + encodeURIComponent(text);
+    };
+    {% endfor %}
+</script>
+
+{% endblock content %}

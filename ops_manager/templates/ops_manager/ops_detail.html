@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Ops Registration{% endblock title %}
+
+{% block content %}
+    <h3 class="page-header">作業詳細</h3>
+    <div class="col col-12" id="detail_block">
+
+
+    <div class="row">
+        <label class="col col-4">実施日</label>
+        <span class="col col-6" type="datetime-local">{{operation_date}}</span>
+    </div>
+ 
+    <div class="row">
+
+        <label class="col col-4">ステータス</label>
+        {% if rollback_status == False %}
+            {% if ops_status == False %}
+                {% if approval_status == False %}
+            <button type="submit" class="btn btn-info btn-sm col-6 " disabled="disabled">確認前</button>
+                {% else %}
+            <button type="submit" class="btn btn-warning btn-sm col-6 " disabled="disabled">実施前</button>
+                {% endif %}
+            {% else %}
+        <button type="submit" class="btn btn-success btn-sm col-6" disabled="disabled">作業完了</button>
+            {% endif %}
+        {% else %}
+        <td><button type="submit" class="btn btn-danger btn-sm col-6" disabled="disabled">中止</button></td>
+        {%endif%}
+
+    </div>
+    <div class="row">
+        <label class="col col-4">作業者名</label>
+        <span class="col col-6" type="text">{{operator}}</span>
+    </div>
+
+    <div class="row">
+        <label class="col col-4">承認番号</label>
+        <span class="col col-6" type="text">{{approval_num}}</span>
+    </div>
+
+    <div class="row">
+        <label class="col col-4">概要</label>
+        <span class="col col-6" type="text">{{title}}</span>
+    </div>
+
+    <div class="row">
+        <label class="col col-4">目的</label>
+        <span class="col col-6" type="text">{{ops_purps}}</span>
+    </div>
+
+    <div class="row">
+        <label class="col col-4">作業手順書</label>
+        <pre class="col col-8" style="background: #fff7ed;"><code>{{yml_data}}</code></pre>
+    </div>
+    
+     {% if rollback_status == False %}
+    <div class="btn-group float-right">
+        <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            確認
+        </button>
+        <div class="dropdown-menu">
+            {% if approval_status == False %}            
+            <a class="dropdown-item" href="{% url 'ops_manager:status' ops_id=ops_id cond='approval' status=1%}">承認</a>
+            {% else %}
+            <a class="dropdown-item" href="{% url 'ops_manager:status' ops_id=ops_id cond='ops' status=1%}">作業完了</a>
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'ops_manager:status'  ops_id=ops_id cond='rollback' status=1%}">作業中止</a>
+        </div>
+    </div>
+         {% else %}
+         <button type="submit" class="btn btn-danger btn-lg float-right" disabled="disabled">作業中止</button>
+         {% endif %}
+        <a href="{% url 'ops_manager:ops_list' %}" class="btn btn-secondary btn-lg float-md-left">戻る</a>
+    </div>
+
+
+
+
+<style type="text/css">
+
+#detail_block{
+     padding-bottom:140px; /*フッターの高さと同じ*/
+}
+
+pre {
+    border-radius: 10px;        /* CSS3草案 */  
+    -webkit-border-radius: 10px;    /* Safari,Google Chrome用 */  
+    -moz-border-radius: 10px;   /* Firefox用 */  
+}
+</style>
+
+<script type="text/javascript">
+
+$('#check').on('click', function(){
+  $('#myModal').modal('show');
+});
+</script>
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Ops Registration{% endblock title %}
+
+{% block content %}
+    <h3 class="page-header">作業の新規登録</h3>
+    <div class="col col-md-8">
+    <form action="{% url 'ops_manager:ops_add' %}" method="post" class="form-horizontal col-xs-7" role="form">
+      {% csrf_token %}
+        <label>作業実施日</label>
+        <input class="form-control" type="datetime-local" value="2017-06-09T16:45" name="operation_date">
+        <!--<input type="text"  class="form-control" placeholder="yyyymmdd" name="operation_date" id="datetimepicker"><br>-->
+
+        <label>作業者名</label>
+        <input type="text" class="form-control" name="operator" placeholder="Toshiya Mabuchi" value="Toshiya Mabuchi"></br>
+
+        <label>承認番号</label>
+        <input type="text" class="form-control" name="approval_num" placeholder=CRQ00000 value=CRQ00000></br>
+
+        <label>対象機器</label>
+        <input type="text" class="form-control" name="router_name" placeholder=gw000-tyo00 value=router1></br>
+
+        <div class="form-group">
+            <label>作業区分</label>
+            <select class="form-control" name="peer_type">
+                <option value="1">Public</option>
+                <option value="2" selected="selected">Private</option>
+                <option value="3">Other</option>
+            </select>
+        <br>
+
+        <label>作業概要</label>
+        <input type="text" class="form-control" name="title" placeholder="Peer to AS65001" value="Peer to AS65001"></br>
+
+        <label>作業詳細</label>
+        <textarea class="form-control" name='ops_purpus' rows="4">本作業は、株式会社ABC(AS65002)が運用するルータと、
+  拠点Aでプライベートピアを構築することを目的としている。
+  経路交換は1経路ずつ受信/送信を行う予定であり、作業による
+  ネットワークの影響は軽微であることを想定している。</textarea>
+        <br>
+        </div>
+            <a href="{% url 'ops_manager:ops_list' %}" class="btn btn-secondary btn-lg float-md-left">戻る</a>
+            <button type="submit" class="btn btn-primary btn-lg float-md-right">次へ</button>
+    </form><br>
+    </div>
+{% endblock content %}
